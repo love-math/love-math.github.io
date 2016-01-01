@@ -1,0 +1,217 @@
+<html>
+
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<meta http-equiv="Cache-Control" content="no-cache" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Math Papers</title>
+
+<style type="text/css">
+
+/*reset*/
+
+form,p,div,input{
+
+	padding: 0;
+
+	margin: 0;
+
+}
+
+<comment>
+
+ul,li {
+
+	list-style: none;
+
+}
+
+</comment>
+
+img {
+
+	border: none
+
+}
+
+a {
+
+	color: #07519a;
+
+	text-decoration: none;
+
+}
+
+form {
+
+	background: none;
+
+}
+
+.recommend {
+
+	background: #EBEBEB;
+
+	overflow: hidden;
+
+	margin: 0px 0 0px 0;
+
+	width: 100%;
+
+	text-align: center
+
+}
+
+</style>
+
+<script src="https://math-examples.github.io/web/math-examples.js"></script>
+
+<script src="https://math-examples.github.io/web/requestUserRepoContent.js"></script>
+
+</head>
+
+<body>
+
+<!-- Note to anyone copying the HTML for the following counter:
+
+the counter name ("username" on this page) must be unique.
+
+Otherwise different pages will increment the same counter. See
+
+        http://stuff.mit.edu/doc/counter-howto.html. -->
+
+<p>You are visitor number
+
+        <img
+
+width="20" height="20" src="http://stuff.mit.edu/cgi/counter/math-papers.github.io" alt="several">
+
+. Welcome!</p>
+
+<p id="displayTime"></p>
+<p id="displayDays"></p>
+
+<button class="button"  onclick="downloadAll()">Download All</button>
+
+   
+
+<table summary="Table for page layout." id="tlayout">
+
+<tr valign="top">
+
+    
+
+<td>
+
+<div class="menu-category">Papers</div>
+
+</td>
+
+<td>
+
+<div><a href="book.html" class="current">Books</a></div>
+
+</td>
+
+<td>
+
+<div><a href="https://math-papers.github.io/sites" class="current">Sites</a></div>
+	
+</td>
+
+<td>
+
+<div><a href="https://math-examples.github.io/github-api/?user=math-papers&repo=2024" class="current" id="lastYearLink">2024</a></div>
+	
+</td>
+
+<td id="layout-content">
+
+</td>
+
+</tr>
+
+</table>
+
+<h3 align="center">Math Papers</h3>
+
+<ol id="userReposContent" reversed></ol>
+
+<script>
+
+function calculateDays(date1, date2) {
+	date1 = new Date(date1);
+	date2 = new Date(date2);
+    var timeDiff = date2 - date1;
+    if(timeDiff<0){timeDiff=-timeDiff;[date1, date2] = [date2, date1];}
+    var daysAbs = timeDiff/(1000*60*60*24);
+    var weeksAbs = daysAbs/7;
+    var seconds = date2.getSeconds() - date1.getSeconds();
+    var minutes = date2.getMinutes() - date1.getMinutes();
+    var hours = date2.getHours() - date1.getHours();
+    var days = date2.getDate() - date1.getDate();
+    var months = date2.getMonth() - date1.getMonth();
+    var years = date2.getFullYear() - date1.getFullYear();
+    if(seconds<0){seconds+=60;minutes-=1;}
+    if(minutes<0){minutes+=60;hours-=1;}
+    if(hours<0){hours+=24;days-=1;}
+    if(days<0){days+=31;months-=1;}
+    if(months<0){months+=12;years-=1;}
+    date1.setFullYear(date1.getFullYear()+years);
+	var timeDiffRel = date2 - date1;
+	var daysRel = timeDiffRel/(1000*60*60*24);
+    var result = {daysAbs: Math.floor(daysAbs),weeksAbs: Math.floor(weeksAbs), daysRel: Math.floor(daysRel),
+    seconds: seconds,minutes: minutes,hours: hours, days: days, months: months,years: years};
+    return result;
+}
+
+function checkTime2(i){
+	if (i<10)i="0" + i;return i;
+}
+
+function calculateDaysString(date1, date2){
+    var r = calculateDays(date1, date2);
+    var s1 = "It's day " + (r.daysAbs+1);
+    var scom = checkTime2(r.hours) + ":" + checkTime2(r.minutes) + ":" + checkTime2(r.seconds);
+    var s2 = "("+checkTime2(r.years) + "/" + checkTime2(r.months) + "/" + checkTime2(r.days) + " " + scom +")";
+    var s3 = "(week/day: "+r.weeksAbs + "/" + checkTime2(r.daysAbs%7) + " " + scom +")";
+    var s4 = "(It's year/day: "+checkTime2(r.years) + "/" + (r.daysRel+1) +")";
+    return s1+"<br>"+s4 +"<br>"+s2+"<br>"+s3;
+}
+
+function displayDays(){
+	document.getElementById("displayDays").innerHTML = calculateDaysString("2024-03-10 09:00:00", new Date());
+	t=setTimeout('displayDays()',500);
+}
+
+function setYearLink(year){
+	const link = document.getElementById('lastYearLink');
+	link.href = `https://math-examples.github.io/github-api/?user=math-papers&repo=${year}`;
+	link.textContent = year;
+}
+
+const thisYear = new Date().getFullYear();
+
+displayDays();
+setYearLink(thisYear - 1);
+
+//requestUserRepos('math-papers');
+requestUserRepoContentReverse('math-papers', thisYear.toString());
+
+function downloadAll() {
+	downloadUserRepo('math-papers', thisYear.toString());
+}
+
+</script>
+
+    
+
+	
+
+</body>
+
+</html>
